@@ -29,9 +29,14 @@ export const login = async (req, res) => {
         .status(403)
         .json({ error: "Usuario o contraseña incorrectas" });
 
-    //Generar toke JWT
+    //Generar token JWT
     const { token, expiresIn } = generateToken(user._id);
     generateRefreshToken(user._id, res);
+
+    res.cookie( "token", token, {
+        httpOnly: true,
+        secure: !(process.env.MODO === "developer")
+    });
 
     return res.json({ token, expiresIn });
   } catch (error) {

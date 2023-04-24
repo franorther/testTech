@@ -13,13 +13,16 @@ export const generateToken = (uid) =>{
 export const generateRefreshToken = (uid, res) => {
     const expiresIn = 6 *60 *24 *30;
     try {
-        const resfreshToken = jwt.sign({uid}, process.env.JWT.REFRESH)
-        res.cookie("refrekToken", resfreshToken, {
-            httpOnly: true.value,
+        const resfreshToken = jwt.sign({uid}, process.env.JWT.REFRESH, {
+            expiresIn
+        });
+
+        res.cookie("refreshToken", resfreshToken, {
+            httpOnly: true,
             secure: !(process.env.MODO == "developer"), 
             expires: new Date(Date.now() + expiresIn * 1000)
         })
     } catch (error) {
-        
+        console.log(error)
     }
 }
